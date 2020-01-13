@@ -143,7 +143,7 @@ In other words, the parent of the YAML element on the line containing starting-p
   (interactive)
   (if (not (yaml-path/yaml-line?))
       (message "There's no YAML element here.")
-    (let ((path (apply #'concatenate 'string
+    (let ((path (apply #'concat
 		       (reverse (cl-mapcar #'(lambda (s) (format "%s/" s))
 					(yaml-path/tags-of-interest (point) (current-indentation)))))))
       (message (format "%s%s" path (yaml-path/tag-at-point (point)))))))
@@ -152,7 +152,7 @@ In other words, the parent of the YAML element on the line containing starting-p
   "Return Ruby expression that selects the current YAML element.
 E.g. ['foo']['bar']['baz']"
   (when (yaml-path/yaml-line?)
-    (let* ((path (apply #'concatenate 'string
+    (let* ((path (apply #'concat
 			(reverse (cl-mapcar #'(lambda (s) (format "['%s']" s))
 					 (yaml-path/tags-of-interest (point) (current-indentation))))))
 	   (leaf (format "['%s']" (yaml-path/tag-at-point (point)))))
@@ -161,7 +161,6 @@ E.g. ['foo']['bar']['baz']"
 (cl-defun yaml-path/display-ruby-expression ()
   "Display (in the message area) the  Ruby expression that selects the current YAML element.
 The expression is also added to the kill-ring.
-
 E.g. ['foo']['bar']['baz']"
   (interactive)
   (let ((msg (yaml-path/ruby-expression)))
@@ -181,7 +180,6 @@ E.g.  \"ruby -e \\\"require 'yaml'\\\" -e \\\"puts YAML.load_file('/tmp/test.yml
 (cl-defun yaml-path/display-ruby-invocation ()
   "Display the Ruby command line that selects and prints the current YAML element.
 The command line is also added to the kill-ring.
-
 E.g.  \"ruby -e \\\"require 'yaml'\\\" -e \\\"puts YAML.load_file('/tmp/test.yml')['foo']['bar']['baz']\\\"\""
   (interactive)
   (let ((msg (yaml-path/ruby-invocation)))
